@@ -1,0 +1,2 @@
+latest	snapshots	war	com/company/app/app-core
+latest  snapshots	zip	com/company/app/ui
