@@ -40,7 +40,7 @@ while read line; do
 	assetPath=$(echo $line | cut -f4 -d ' ')
 
 	if [ $assetMode = "latest" ]; then
-		assetPath=`print-latest-snapshot.sh --repo $assetRepo \
+		assetPath=`print-latest-snapshot.sh --asset-repo $assetRepo \
 		                                    --asset-path $assetPath \
 											--asset-type $assetType`
         	if [ $? -ne 0 ]; then
