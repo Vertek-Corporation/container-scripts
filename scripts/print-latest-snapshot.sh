@@ -59,7 +59,7 @@ function find_latest_snapshot_remote {
 
 	ASSET_BASENAME=`basename $ASSET`
 
-	echo $BASE_URL/$ASSET/$latest_version/$ASSET_BASENAME-$latest_component_version.$2BASE_URL="$MAVEN_REPO_BASE_URL/snapshots"
+	echo $BASE_URL/$ASSET/$latest_version/$ASSET_BASENAME-$latest_component_version.$2
 }
 
 function main {
