@@ -1,5 +1,8 @@
 #!/usr/local/bin/bash
 
+
+declare BASE_URL="$MAVEN_REPO_BASE_URL/repository"
+
 if [ "x$CONTAINER_SCRIPT_HOME" == "x" ]; then
         echo "Please set CONTAINER_SCRIPT_HOME"
         exit 1;
@@ -45,7 +48,7 @@ while read line; do
                 	exit 1;
         	fi
 	else
-		assetPath="$MAVEN_REPO_BASE_URL/$assetRepo/$assetPath.$assetType"
+		assetPath="$BASE_URL/$assetRepo/$assetPath.$assetType"
 	fi
 
 	echo $assetPath >> $targetFile
