@@ -1,6 +1,5 @@
 #!/usr/local/bin/bash
 
-
 if [ "x$CONTAINER_SCRIPT_HOME" == "x" ]; then
         echo "Please set CONTAINER_SCRIPT_HOME"
         exit 1;
@@ -8,6 +7,7 @@ fi
 
 source $CONTAINER_SCRIPT_HOME/common.sh
 source $CONTAINER_SCRIPT_HOME/common-opts.sh
+source $CONTAINER_SCRIPT_HOME/common-maven.sh
 
 buildDir=$BUILD_DIR_PREFIX-$(get_property_value 'environment')
 
@@ -32,14 +32,13 @@ if [ ! -f $sourceFile ]; then
 	exit 1;
 fi 
 
-
 while read line; do
-	assetMode=$(echo $line | cut -f1 -d ' ')
+	assetVersion=$(echo $line | cut -f1 -d ' ')
 	assetRepo=$(echo $line | cut -f2 -d ' ')
 	assetType=$(echo $line | cut -f3 -d ' ')
 	assetPath=$(echo $line | cut -f4 -d ' ')
 
-	if [ $assetMode = "latest" ]; then
+	if [ $assetVersion="latest" ]; then
 		assetPath=`print-latest-snapshot.sh --asset-repo $assetRepo \
 		                                    --asset-path $assetPath \
 											--asset-type $assetType`
@@ -48,7 +47,7 @@ while read line; do
                 	exit 1;
         	fi
 	else
-		assetPath="$MAVEN_REPO_BASE_URL/$assetRepo/$assetPath.$assetType"
+		assetPath=$(get_maven_asset_path $assetRepo $assetPath $assetType $assetVersion)
 	fi
 
 	echo $assetPath >> $targetFile
