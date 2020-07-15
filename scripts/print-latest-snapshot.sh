@@ -1,10 +1,48 @@
 #!/usr/local/bin/bash
 
-# Asset name (first and sole argument) is from the snapshots/ context of the repo.  So, for example, 
+# asset (first and sole argument) is from the snapshots/ context of the repo.  So, for example, 
 # com/company/app
 
-declare ASSET
-declare ASSET_TYPE
+declare repo
+declare asset
+declare asset_type
+
+function parse_cli {
+	for arg in "$@"; do # transform long options to short ones 
+		shift
+		case "$arg" in
+			"--repo")        set -- "$@" "-r" ;; # Maven repo (e.g. repository/snapshots)
+			"--asset-type")  set -- "$@" "-t" ;; # The type of asset (e.g. war, zip)
+			"--asset-path")  set -- "$@" "-a" ;; # The asset path
+			*)               set -- "$@" "$arg"
+		esac
+	done
+
+	# Parse command line options safely using getops
+	while getopts "r:t:a:" opt; do
+		case $opt in
+			r) repo=$OPTARG ;;
+			a) asset=$OPTARG ;;
+			t) asset_type=$OPTARG ;;
+			\?)
+				echo "Invalid option: -$OPTARG" >&2
+				;;
+		esac
+	done
+}
+
+function check_cli { # by making sure that the requied options are supplied, etc.
+	declare -a required_opts=("repo" "asset" "asset_type")
+
+	for opt in ${required_opts[@]};
+	do
+		if [[ "x${!opt}" == "x" ]]
+		then
+			echo "$opt is required"
+			exit 1;
+		fi
+	done;
+}
 
 function process_maven_metadata {
 	local latest_version
@@ -29,19 +67,19 @@ function process_maven_metadata {
 
 function find_latest_snapshot_local { 
 	local BASE_URL="$MAVEN_REPO_BASE_URL/repository"
-	local ASSET_BASENAME=`basename $ASSET`
+	local asset_basename=`basename $asset`
 
-	cp $BASE_URL/$ASSET/maven-metadata-local.xml baseVersion.xml
+	cp $BASE_URL/$asset/maven-metadata-local.xml baseVersion.xml
 
 	local latest_version=$(process_maven_metadata)
 
-	echo $BASE_URL/$ASSET/$latest_version/$ASSET_BASENAME-$latest_version.$ASSET_TYPE
+	echo $BASE_URL/$asset/$latest_version/$asset_basename-$latest_version.$asset_type
 }
 
 function find_latest_snapshot_remote {
 	local BASE_URL="$MAVEN_REPO_BASE_URL/repository/snapshots"
 
-	wget --quiet $BASE_URL/$ASSET/maven-metadata.xml -O baseVersion.xml
+	wget --quiet $BASE_URL/$asset/maven-metadata.xml -O baseVersion.xml
 	if [ $? -ne 0 ]; then
 		echo "error retrieving target assets from the repository"
 		exit 1;
@@ -49,7 +87,7 @@ function find_latest_snapshot_remote {
 
     local latest_version=$(process_maven_metadata)
 
-	wget --quiet $BASE_URL/$ASSET/$latest_version/maven-metadata.xml -O artifactVersion.xml
+	wget --quiet $BASE_URL/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml
 
 	temp_component_version=`grep -m 1 \<value\> ./artifactVersion.xml`
 
@@ -57,9 +95,9 @@ function find_latest_snapshot_remote {
 
 	rm artifactVersion.xml
 
-	ASSET_BASENAME=`basename $ASSET`
+	asset_basename=`basename $asset`
 
-	echo $BASE_URL/$ASSET/$latest_version/$ASSET_BASENAME-$latest_component_version.$2
+	echo $BASE_URL/$asset/$latest_version/$asset_basename-$latest_component_version.$2
 }
 
 function main {
@@ -68,16 +106,15 @@ function main {
 		exit 1;
 	fi
 
-	ASSET=$1
-	ASSET_TYPE=$2
-
 	if [ `basename $MAVEN_REPO_BASE_URL` = '.m2' ]; then
-		find_latest_snapshot_local $ASSET, $ASSET_TYPE
+		find_latest_snapshot_local $asset, $asset_type
 		exit 0;
 	else 
-		find_latest_snapshot_remote $ASSET, $ASSET_TYPE
+		find_latest_snapshot_remote $asset, $asset_type
 		exit 0;
 	fi 
 }
 
+parse_cli $@
+check_cli
 main $@

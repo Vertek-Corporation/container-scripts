@@ -1,8 +1,6 @@
 #!/usr/local/bin/bash
 
 
-declare BASE_URL="$MAVEN_REPO_BASE_URL/repository"
-
 if [ "x$CONTAINER_SCRIPT_HOME" == "x" ]; then
         echo "Please set CONTAINER_SCRIPT_HOME"
         exit 1;
@@ -42,13 +40,15 @@ while read line; do
 	assetPath=$(echo $line | cut -f4 -d ' ')
 
 	if [ $assetMode = "latest" ]; then
-		assetPath=`print-latest-snapshot.sh $assetPath $assetType`
+		assetPath=`print-latest-snapshot.sh --repo $assetRepo \
+		                                    --asset-path $assetPath \
+											--asset-type $assetType`
         	if [ $? -ne 0 ]; then
                 	echo "can't get latest snapshot, operation aborted" 
                 	exit 1;
         	fi
 	else
-		assetPath="$BASE_URL/$assetRepo/$assetPath.$assetType"
+		assetPath="$MAVEN_REPO_BASE_URL/$assetRepo/$assetPath.$assetType"
 	fi
 
 	echo $assetPath >> $targetFile
