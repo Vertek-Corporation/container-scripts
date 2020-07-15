@@ -74,7 +74,7 @@ function find_latest_snapshot_local {
 }
 
 function find_latest_snapshot_remote {
-	wget --quiet $asset_repo_urlnn/$asset/maven-metadata.xml -O baseVersion.xml
+	wget --quiet $asset_repo_url/$asset/maven-metadata.xml -O baseVersion.xml
 	if [ $? -ne 0 ]; then
 		echo "error retrieving target assets from the repository"
 		exit 1;
@@ -82,7 +82,7 @@ function find_latest_snapshot_remote {
 
     local latest_version=$(process_maven_metadata)
 
-	wget --quiet $asset_repo_urlnn/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml
+	wget --quiet $asset_repo_url/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml
 
 	temp_component_version=`grep -m 1 \<value\> ./artifactVersion.xml`
 
