@@ -1,5 +1,7 @@
 #!/usr/local/bin/bash
 
+source $CONTAINER_SCRIPT_HOME/common-mvn.sh
+
 declare asset_repo	   # Maven repo (e.g. repository/snapshots) 
 declare asset		   # The asset path
 declare asset_type     # The type of asset (e.g. war, zip)
@@ -103,7 +105,7 @@ function main {
 		exit 1;
 	fi
 
-	if [ `basename $MAVEN_REPO_BASE_URL` = '.m2' ]; then
+	if is_repo_local; then
 		find_latest_snapshot_local $asset, $asset_type
 	else 
 		find_latest_snapshot_remote $asset, $asset_type
