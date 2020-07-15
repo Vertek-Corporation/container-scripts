@@ -92,7 +92,7 @@ function find_latest_snapshot_remote {
 
 	asset_basename=`basename $asset`
 
-	echo $asset_repo_urlnn/$asset/$latest_version/$asset_basename-$latest_component_version.$2
+	echo $asset_repo_url/$asset/$latest_version/$asset_basename-$latest_component_version.$2
 }
 
 function main {
