@@ -9,12 +9,10 @@ function is_aws_version_two_or_later {
 }
 
 function aws_ecr_login {
-    if [[ is_aws_version_two_or_later ]]; then
+    if is_aws_version_two_or_later; then
 		local aws_ecr_passwd=`aws ecr get-login-password --profile $env`
-		echo $aws_ecr_passwd | \
-            docker login --username AWS \
-                        --password-stdin \
-                        $repo
+		echo $aws_ecr_passwd | docker login --username AWS \
+                        --password-stdin $repo
 	else
 		eval `aws ecr get-login --profile $env --no-include-email`
 	fi
