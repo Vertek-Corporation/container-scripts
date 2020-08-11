@@ -1,10 +1,11 @@
+function get_aws_major_version {
+    echo $(aws --version 2>&1 | sed -E 's/aws-cli\/([0-9]).*/\1/')
+}
+
 function is_aws_version_two_or_later {
-    local aws_version=`aws --version 2>&1 | sed -E 's/aws-cli\/([0-9]).*/\1/'`
-	
-	if [[ "$aws_version" -ge "2" ]]; then
+	if [[ $(get_aws_major_version) -ge "2" ]]; then
         return;
     fi
-
 	false
 }
 
@@ -14,6 +15,10 @@ function aws_ecr_login {
 		echo $aws_ecr_passwd | docker login --username AWS \
                         --password-stdin $repo
 	else
-		eval `aws ecr get-login --profile $env --no-include-email`
+        aws_ecr_login_v1
 	fi
+}
+
+function aws_ecr_login_v1 {
+	eval `aws ecr get-login --profile $env --no-include-email`
 }
