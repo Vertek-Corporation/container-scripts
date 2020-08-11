@@ -6,9 +6,10 @@ if [ "x$CONTAINER_SCRIPT_HOME" == "x" ]; then
 fi
 
 source $CONTAINER_SCRIPT_HOME/common-repo.sh
+source $CONTAINER_SCRIPT_HOME/common-aws.sh
 
 if [[ $repo == *"amazonaws"* ]]; then
-	eval `aws ecr get-login --profile $env --no-include-email`
+	aws_ecr_login
 else
 	docker login $repo
 fi
