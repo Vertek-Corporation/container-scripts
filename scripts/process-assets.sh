@@ -38,7 +38,7 @@ while read line; do
 	assetType=$(echo $line | cut -f3 -d ' ')
 	assetPath=$(echo $line | cut -f4 -d ' ')
 
-	if [ $assetVersion="latest" ]; then
+	if [[ $assetVersion == "latest" ]]; then
 		assetPath=`print-latest-snapshot.sh --asset-repo $assetRepo \
 		                                    --asset-path $assetPath \
 											--asset-type $assetType`
