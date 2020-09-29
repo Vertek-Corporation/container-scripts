@@ -8,7 +8,7 @@ fi
 source $CONTAINER_SCRIPT_HOME/common.sh 
 source $CONTAINER_SCRIPT_HOME/common-opts.sh 
 
-buildDir=$BUILD_DIR_PREFIX-$(get_property_value 'environment')
+buildDir=$WD/$BUILD_DIR_PREFIX-$(get_property_value 'environment')
 
 if [ ! -d $buildDir ]; then
 	echo Cannot find $buildDir
@@ -18,15 +18,15 @@ fi
 imageName=$(get_image_name);
 
 # Prep for the build
-cp $buildDir/env.properties $PWD/customization
-cp $CONTAINER_SCRIPT_HOME/wildfly/execute.sh $PWD/customization
+cp $buildDir/env.properties $WD/customization
+cp $CONTAINER_SCRIPT_HOME/wildfly/execute.sh $WD/customization
 
 # Build
-docker build -t $imageName -f $buildDir/Dockerfile $PWD
+docker build -t $imageName -f $buildDir/Dockerfile $WD
 
 # Clean up after the build
-rm $PWD/customization/env.properties
-rm $PWD/customization/execute.sh
+rm $WD/customization/env.properties
+rm $WD/customization/execute.sh
 
 # System cleanup
 docker container prune --force

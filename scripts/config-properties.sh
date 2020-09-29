@@ -1,9 +1,12 @@
 #!/usr/local/bin/bash
 
 declare -A properties
+declare WD=`pwd`
 
-# Shorthand for the working directory
-WD=`pwd`
+# Short hand for container build dir
+if [[ ! -z $CONTAINER_BUILD_DIR ]]; then
+	WD=$CONTAINER_BUILD_DIR
+fi
 
 # Main configuration property file
 CF=config.properties

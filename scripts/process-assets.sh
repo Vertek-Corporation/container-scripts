@@ -9,7 +9,7 @@ source $CONTAINER_SCRIPT_HOME/common.sh
 source $CONTAINER_SCRIPT_HOME/common-opts.sh
 source $CONTAINER_SCRIPT_HOME/common-maven.sh
 
-buildDir=$BUILD_DIR_PREFIX-$(get_property_value 'environment')
+buildDir=$WD/$BUILD_DIR_PREFIX-$(get_property_value 'environment')
 
 if [ ! -d $buildDir ]; then
         echo Cannot find $buildDir
