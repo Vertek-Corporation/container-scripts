@@ -4,7 +4,7 @@ declare -A properties
 declare WD=`pwd`
 
 # Short hand for container build dir
-if [[ ! -z $CONTAINER_BUILD_DIR ]]; then
+if [[ "x$CONTAINER_BUILD_DIR" != "x" ]]; then
 	WD=$CONTAINER_BUILD_DIR
 fi
 
@@ -17,8 +17,8 @@ CF=config.properties
 set_property_file() {
 	CF=$1
 
-	if [ ! -f $CF ]; then
-        	echo Cannot find $CF
+	if [ ! -f $WD/$CF ]; then
+        	echo Cannot find $WD/$CF
         	exit 1;
 	fi
 }

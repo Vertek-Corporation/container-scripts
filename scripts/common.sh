@@ -14,6 +14,10 @@ BUILD_DIR_PREFIX=env;
 # Short hand for working directory
 WD=`dirname "$0"`
 
+if [[ "x$CONTAINER_BUILD_DIR" != "x" ]]; then
+	WD=$CONTAINER_BUILD_DIR
+fi
+
 # Put properties that are needed here.  These get validated later.
 REQUIRED_PROPERTIES=(application environment)
 
