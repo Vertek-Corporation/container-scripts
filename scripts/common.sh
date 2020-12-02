@@ -31,6 +31,10 @@ get_image_name() {
 	echo $(get_property_value 'application')/$(get_property_value 'environment')
 }
 
+get_docker_host() {
+	echo $(get_property_value 'dockerHost')
+}
+
 get_environment() {
 	echo $(get_property_value 'environment')
 }

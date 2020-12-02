@@ -3,7 +3,6 @@
 These scripts automate the build of Docker images.  For example, you could build containers that
 run wildfly with configurations for the entire development lifecycle.  
 
-
 # Configurations
 
 These scripts have been tested in the following configuration:
@@ -31,6 +30,7 @@ It also includes several scripts to automate common commands. You don't have to 
 * rlogin.sh to log into a docker repo
 * rpush.sh to push to a docker repo
 * rpull.sh to pull a docker image from the repo
+* iscan.sh to scan images for vulnerabilities
 
 # Setup
 
@@ -54,6 +54,22 @@ export CONTAINER_SCRIPT_HOME=~/projects/container-scripts/scripts
 export MAVEN_REPO_BASE_URL=https://nexus.vertek.com
 export PATH=$PATH: $CONTAINER_SCRIPT_HOME
 ```
+
+## Clair (vulnerability scanning) support
+
+To utlize Clair you must install the Clair scanner (https://github.com/arminc/clair-scanner) 
+locally.  The scripts will automatically install the Clair server via Docker. You'll want 
+to make sure you have the resources for this.  The server side utilizes clair-local-scan, 
+https://github.com/arminc/clair-local-scan, which deploys a Postgress instance and Clair
+server that are already populated with the latest CVEs.  Otherwise, Clair will take a fair
+amount of time to download them from scratch.
+
+Install per the instructions and make sure "clair-scanner" is in your path.  Our scripts 
+will check for it and notify you if it hasn't been installed.  Note: this is optional 
+but strongly recommended.
+
+This requires the dockerHost configuration property in config.properties to be set properly.
+
 # Getting started
 
 1.  ibuild.sh 
