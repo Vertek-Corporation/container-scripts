@@ -3,9 +3,12 @@
 source $CONTAINER_SCRIPT_HOME/common.sh 
 source $CONTAINER_SCRIPT_HOME/common-opts.sh 
 
-function check_for_clair {
-	echo "TODO"
-	# TODO
+function check_for_clair_scanner {
+	if ! command -v clair-scanner &> /dev/null
+	then
+		echo "clair-scanner is not in your path or isn't installed"
+		exit 1
+	fi
 }
 
 function check_for_clair_whitelist {
@@ -27,7 +30,7 @@ function main {
 	# Grab the tag from the environment property file, use as default
 	local version=$(get_property_value 'version')
 
-	check_for_clair
+	check_for_clair_scanner
 	check_for_clair_whitelist
 
 	# start the container
