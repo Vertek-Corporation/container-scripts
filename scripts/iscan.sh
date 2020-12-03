@@ -1,8 +1,11 @@
 #!/usr/local/bin/bash
 
+declare CVE_WHITELIST_FILE=cve-whitelist.yaml
+
 source $CONTAINER_SCRIPT_HOME/common.sh 
 source $CONTAINER_SCRIPT_HOME/common-opts.sh 
 
+# Checks to see if the clair-scanner command is installed and exits when it isn't.
 function check_for_clair_scanner {
 	if ! command -v clair-scanner &> /dev/null
 	then
@@ -11,9 +14,13 @@ function check_for_clair_scanner {
 	fi
 }
 
+# Checks to make sure that a whitelist exists in the appropriate location.  If not,
+# create it.
 function check_for_clair_whitelist {
-	echo "TODO"
-	# TODO
+	if [ ! -f "$CVE_WHITELIST_FILE" ]; then
+		echo "CVE whitelist didn't exist, created as $CVE_WHITELIST_FILE"
+		touch $CVE_WHITELIST_FILE
+	fi
 }
 
 function main {
