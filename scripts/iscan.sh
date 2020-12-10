@@ -19,7 +19,11 @@ function check_for_clair_scanner {
 function check_for_clair_whitelist {
 	if [ ! -f "$CVE_WHITELIST_FILE" ]; then
 		echo "CVE whitelist didn't exist, created as $CVE_WHITELIST_FILE"
-		touch $CVE_WHITELIST_FILE
+		echo "generalwhitelist: # approvals for any image (example below)"  >> $CVE_WHITELIST_FILE
+		echo "    #RHSA-2020:4007: systemd"                                 >> $CVE_WHITELIST_FILE
+		echo "images: # approvals for a specific image"                     >> $CVE_WHITELIST_FILE
+		echo "    #platform/dev:"                                           >> $CVE_WHITELIST_FILE
+		echo "        #RHSA-2020:3861: glibc"                               >> $CVE_WHITELIST_FILE
 	fi
 }
 
@@ -40,11 +44,11 @@ function main {
 	check_for_clair_scanner
 	check_for_clair_whitelist
 
-	# start the container
+	# start the clair server containers
 	docker-compose --file $CONTAINER_SCRIPT_HOME/clair/docker-compose.yaml up -d
 
 	# scan the container
-	clair-scanner --ip $dockerHost $imageName:$version
+	clair-scanner -w $CVE_WHITELIST_FILE --ip $dockerHost $imageName:$version
 
 	# spin down the clair server and database
 	# docker-compose --file $CONTAINER_SCRIPT_HOME/clair/docker-compose.yaml down
