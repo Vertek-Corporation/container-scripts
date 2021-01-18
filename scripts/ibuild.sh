@@ -31,3 +31,5 @@ rm $WD/customization/execute.sh
 # System cleanup
 docker container prune --force
 docker image prune --force
+
+iscan.sh $@
