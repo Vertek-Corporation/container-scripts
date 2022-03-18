@@ -1,7 +1,6 @@
 #!/usr/local/bin/bash
 
 # Transform long options to short ones
-#
 for arg in "$@"; do
   shift
   case "$arg" in
@@ -12,7 +11,6 @@ for arg in "$@"; do
 done
 
 # Parse command line options safely using getops
-#
 while getopts ":e:v:" opt; do
   case $opt in
     e)
