@@ -32,4 +32,5 @@ rm $WD/customization/execute.sh
 docker container prune --force
 docker image prune --force
 
-iscan.sh $@
+# Disabled for now.  TODO: compare to "docker scan"
+# iscan.sh $@
