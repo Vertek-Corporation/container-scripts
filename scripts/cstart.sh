@@ -8,7 +8,7 @@ fi
 source $CONTAINER_SCRIPT_HOME/common.sh
 
 # Allows for some basic command line options to customize the behavior
-# of the command.  This isn't mean to cover the many options that you
+# of the command.  This isn't meant to cover the many options that you
 # could supply, say, docker run.  Use docker run directly if you have
 # to do something fancy.
 #
@@ -66,8 +66,9 @@ fi
 #
 if [ $new == "true" ] || [ -z $(get_last_container_id) ] ; then
 	docker run $rm -d -p 8080:8080 \
-		          -p 9990:9990 \
-                          -p 8443:8443 $(get_image_name)
+		                -p 9990:9990 \
+                    -p 8443:8443 \
+                    -p 8787:8787 $(get_image_name)
 else 
 	if [[ $rm ]]; then echo Remove option ignored; fi
 	echo Reusing $(get_last_container_id) for $(get_image_name); 
