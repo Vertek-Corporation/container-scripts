@@ -51,7 +51,7 @@ Here’s my configuration as an example:
 ```
 # Container scripts will need to know where to find themselves
 export CONTAINER_SCRIPT_HOME=~/projects/container-scripts/scripts
-export MAVEN_REPO_BASE_URL=https://nexus.vertek.com
+export MAVEN_REPO_BASE_URL=https://maven.pkg.github.com/Vertek-Corporation
 export PATH=$PATH: $CONTAINER_SCRIPT_HOME
 ```
 # Getting started
