@@ -14,16 +14,18 @@ function parse_cli {
 			"--asset-repo")  set -- "$@" "-r" ;; 
 			"--asset-type")  set -- "$@" "-t" ;; # The type of asset (e.g. war, zip)
 			"--asset-path")  set -- "$@" "-a" ;; # The asset path
+      "--token")  set -- "$@" "-o" ;;
 			*)               set -- "$@" "$arg"
 		esac
 	done
 
 	# Parse command line options safely using getops
-	while getopts "r:t:a:" opt; do
+	while getopts "r:t:a:o:" opt; do
 		case $opt in
 			r) asset_repo=$OPTARG ;;
 			a) asset=$OPTARG ;;
 			t) asset_type=$OPTARG ;;
+      o) token=$OPTARG ;;
 			\?)
 				echo "Invalid option: -$OPTARG" >&2
 				;;
@@ -32,7 +34,7 @@ function parse_cli {
 }
 
 function check_cli { # by making sure that the requied options are supplied, etc.
-	declare -a required_opts=("asset_repo" "asset" "asset_type")
+	declare -a required_opts=("asset_repo" "asset" "asset_type" "token")
 
 	for opt in ${required_opts[@]};
 	do
@@ -76,15 +78,15 @@ function find_latest_snapshot_local {
 }
 
 function find_latest_snapshot_remote {
-	wget --quiet $asset_repo_url/$asset/maven-metadata.xml -O baseVersion.xml
+	wget --quiet --header "Authorization: Bearer $token" $asset_repo_url/$asset/maven-metadata.xml -O baseVersion.xml && xmllint baseVersion.xml --format --output baseVersion.xml
 	if [ $? -ne 0 ]; then
 		echo "error retrieving target assets from the repository"
 		exit 1;
 	fi
 
-    local latest_version=$(process_maven_metadata)
+  local latest_version=$(process_maven_metadata)
 
-	wget --quiet $asset_repo_url/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml
+  wget --quiet --header "Authorization: Bearer $token" $asset_repo_url/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml && xmllint artifactVersion.xml --format --output artifactVersion.xml
 
 	temp_component_version=`grep -m 1 \<value\> ./artifactVersion.xml`
 

@@ -37,11 +37,13 @@ while read line; do
 	assetRepo=$(echo $line | cut -f2 -d ' ')
 	assetType=$(echo $line | cut -f3 -d ' ')
 	assetPath=$(echo $line | cut -f4 -d ' ')
-
+	assetPath=${assetPath//[[:space:]]/} # removes trailing space if any
+  TOKEN=$(get_property_value 'token')
 	if [[ $assetVersion == "latest" ]]; then
 		assetPath=`print-latest-snapshot.sh --asset-repo $assetRepo \
 		                                    --asset-path $assetPath \
-											--asset-type $assetType`
+											                  --asset-type $assetType \
+											                  --token $TOKEN`
         	if [ $? -ne 0 ]; then
                 	echo "can't get latest snapshot, operation aborted" 
                 	exit 1;

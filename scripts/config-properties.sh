@@ -11,7 +11,7 @@ fi
 # Main configuration property file
 CF=config.properties
 
-# Allows the caller to switch the property file from one to another.  Usefule 
+# Allows the caller to switch the property file from one to another.  Useful
 # because we have global properties and environment specific properties.
 #
 set_property_file() {

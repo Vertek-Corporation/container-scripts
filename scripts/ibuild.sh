@@ -16,6 +16,7 @@ if [ ! -d $buildDir ]; then
 fi
 
 imageName=$(get_image_name);
+imageName=${imageName//[[:space:]]/} # removes trailing space if any
 
 # Prep for the build
 cp $buildDir/env.properties $WD/customization
