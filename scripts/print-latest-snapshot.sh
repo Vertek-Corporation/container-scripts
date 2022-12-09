@@ -88,7 +88,7 @@ function find_latest_snapshot_remote {
 
   wget --quiet --header "Authorization: Bearer $token" $asset_repo_url/$asset/$latest_version/maven-metadata.xml -O artifactVersion.xml && xmllint artifactVersion.xml --format --output artifactVersion.xml
 
-	temp_component_version=`grep -m 1 \<value\> ./artifactVersion.xml`
+	temp_component_version=`grep \<value\> ./artifactVersion.xml | tail -1`
 
 	latest_component_version=$(echo "${temp_component_version}" | sed -e 's/<value>\(.*\)<\/value>/\1/' | sed -e 's/ //g')
 
