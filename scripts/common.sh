@@ -5,7 +5,7 @@ if [ ! -d "$CONTAINER_SCRIPT_HOME" ]; then
 	exit 1;
 fi
 
-# Enviornment file
+# Environment file
 EF=env.properties
 
 # Create build directories called $BUILD_PREFIX-<my directory name> 
