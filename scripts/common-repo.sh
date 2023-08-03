@@ -26,7 +26,13 @@ tag=$imageName:$version
 if [ ! -z $repo ]; then
         if [[ $repo == *"amazonaws"* ]]; then
 		# slightly different format for the respository tag
-                tag=$repo/$application:$version
+		            # If the environment is test, then we need to add the environment to the tag
+                # this is so we can use the same aws ecr for dev and test images
+                if [[ $env == "test" ]]; then
+                      tag=$repo/$application-$env:$version
+                else
+                      tag=$repo/$application:$version
+                fi
         else
                 tag=$repo/$imageName:$version
         fi
