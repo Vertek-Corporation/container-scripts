@@ -10,6 +10,8 @@ source $CONTAINER_SCRIPT_HOME/common-aws.sh
 
 if [[ $repo == *"amazonaws"* ]]; then
 	aws_ecr_login
+elif [[ $repo == *"azurecr"* ]]; then
+  az acr login --name $repo
 else
 	docker login $repo
 fi
