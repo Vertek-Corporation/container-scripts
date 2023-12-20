@@ -48,7 +48,7 @@ function check_cli { # by making sure that the requied options are supplied, etc
 
 function process_maven_metadata {
 	local latest_version
-	local versions=`grep \<version\> ./baseVersion.xml `
+	local versions=`grep \<version\> ./baseVersion.xml | grep -v TEST-SNAPSHOT`
 
 	for version in $versions
 	do
